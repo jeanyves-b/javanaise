@@ -49,7 +49,7 @@ public class JvnServerImpl
 	* The JVN service is not used anymore
 	* @throws JvnException
 	**/
-	public  void jvnTerminate()
+	public void jvnTerminate()
 	throws jvn.JvnException {
     // to be completed 
 	} 
@@ -59,10 +59,10 @@ public class JvnServerImpl
 	* @param o : the JVN object state
 	* @throws JvnException
 	**/
-	public  JvnObject jvnCreateObject(Serializable o)
+	public JvnObject jvnCreateObject(Serializable o)
 	throws jvn.JvnException { 
 		// to be completed 
-		return null; 
+		return null;
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class JvnServerImpl
 	* @param jo : the JVN object 
 	* @throws JvnException
 	**/
-	public  void jvnRegisterObject(String jon, JvnObject jo)
+	public void jvnRegisterObject(String jon, JvnObject jo)
 	throws jvn.JvnException {
 		// to be completed 
 	}
@@ -120,7 +120,7 @@ public class JvnServerImpl
 	* @return void
 	* @throws java.rmi.RemoteException,JvnException
 	**/
-  public void jvnInvalidateReader(int joi)
+	public void jvnInvalidateReader(int joi)
 	throws java.rmi.RemoteException,jvn.JvnException {
 		// to be completed 
 	};
@@ -131,7 +131,7 @@ public class JvnServerImpl
 	* @return the current JVN object state
 	* @throws java.rmi.RemoteException,JvnException
 	**/
-  public Serializable jvnInvalidateWriter(int joi)
+	public Serializable jvnInvalidateWriter(int joi)
 	throws java.rmi.RemoteException,jvn.JvnException { 
 		// to be completed 
 		return null;
@@ -143,8 +143,8 @@ public class JvnServerImpl
 	* @return the current JVN object state
 	* @throws java.rmi.RemoteException,JvnException
 	**/
-   public Serializable jvnInvalidateWriterForReader(int joi)
-	 throws java.rmi.RemoteException,jvn.JvnException { 
+	public Serializable jvnInvalidateWriterForReader(int joi)
+	throws java.rmi.RemoteException,jvn.JvnException { 
 		// to be completed 
 		return null;
 	 };

@@ -12,7 +12,7 @@ import java.io.*;
 
 
 /**
- * Remote Interface of the JVN Coordinator  
+ * Remote Interface of the JVN Coordinator
  */
 
 public interface JvnRemoteCoord extends Remote {
@@ -52,8 +52,8 @@ public interface JvnRemoteCoord extends Remote {
 	* @return the current JVN object state
 	* @throws java.rmi.RemoteException, JvnException
 	**/
-   public Serializable jvnLockRead(int joi, JvnRemoteServer js)
-	 throws java.rmi.RemoteException, JvnException;
+    public Serializable jvnLockRead(int joi, JvnRemoteServer js)
+	throws java.rmi.RemoteException, JvnException;
 
 	/**
 	* Get a Write lock on a JVN object managed by a given JVN server 
@@ -62,16 +62,16 @@ public interface JvnRemoteCoord extends Remote {
 	* @return the current JVN object state
 	* @throws java.rmi.RemoteException, JvnException
 	**/
-   public Serializable jvnLockWrite(int joi, JvnRemoteServer js)
-	 throws java.rmi.RemoteException, JvnException;
+    public Serializable jvnLockWrite(int joi, JvnRemoteServer js)
+	throws java.rmi.RemoteException, JvnException;
 
 	/**
 	* A JVN server terminates
 	* @param js  : the remote reference of the server
 	* @throws java.rmi.RemoteException, JvnException
 	**/
-  public void jvnTerminate(JvnRemoteServer js)
-	 throws java.rmi.RemoteException, JvnException;
+    public void jvnTerminate(JvnRemoteServer js)
+	throws java.rmi.RemoteException, JvnException;
 
  }
 
