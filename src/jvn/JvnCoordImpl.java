@@ -26,6 +26,7 @@ public class JvnCoordImpl
 	**/
 	private JvnCoordImpl() throws Exception {
 		count = 0;
+
 	}
 
 	/**
@@ -99,13 +100,13 @@ public class JvnCoordImpl
 		}
     }
 
-  /**
-  * Get a Write lock on a JVN object managed by a given JVN server 
-  * @param joi : the JVN object identification
-  * @param js  : the remote reference of the server
-  * @return the current JVN object state
-  * @throws java.rmi.RemoteException, JvnException
-  **/
+	/**
+	* Get a Write lock on a JVN object managed by a given JVN server 
+	* @param joi : the JVN object identification
+	* @param js  : the remote reference of the server
+	* @return the current JVN object state
+	* @throws java.rmi.RemoteException, JvnException
+	**/
 	public Serializable jvnLockWrite(int joi, JvnRemoteServer js)
 	throws java.rmi.RemoteException, JvnException{
 	for (int i=0 ; i<list.size() ; i++)
