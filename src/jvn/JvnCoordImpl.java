@@ -17,6 +17,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import jvn.CoordObject.States;
+
 public class JvnCoordImpl 	
               /*extends UnicastRemoteObject*/
 							implements JvnRemoteCoord{
@@ -28,7 +30,7 @@ public class JvnCoordImpl
   **/
 	
 	public int count;
-	public ArrayList<CoordObject> list = new ArrayList<>();
+	public ArrayList<CoordObject> list = new ArrayList<CoordObject>();
 
 	public static void main(String[] args){
 
@@ -81,14 +83,14 @@ public class JvnCoordImpl
 	throws java.rmi.RemoteException,jvn.JvnException{
 		CoordObject obj = new CoordObject();
 		obj.name = jon;
-		obj.id = jo.id;
-		if (obj.id == -1)
+		obj.id = jo.jvnGetObjectId();
+		if (obj.id == -1) //just in case, security check
 			obj.id = count++;
 		obj.users.add(js);
-		else if (jo.state == R || jo.state == RC)
-			obj.state.add(R);
-		else
-			obj.state.add(W);
+		
+		//I don't think we need this when we register. We'll take into account that the user will unlock before registering
+		
+		//obj.state.add(States.W);
 		list.add(obj);
 	}
 
@@ -102,7 +104,7 @@ public class JvnCoordImpl
 	throws java.rmi.RemoteException,jvn.JvnException{
 	for (int i=0 ; i<list.size() ; i++)
     	if (list.get(i).name == jon)
-    		list.get(i).jo;
+    		return list.get(i).jo;
     return null;
 	}
   
@@ -115,17 +117,19 @@ public class JvnCoordImpl
   **/
     public Serializable jvnLockRead(int joi, JvnRemoteServer js)
     throws java.rmi.RemoteException, JvnException{
+    	CoordObject obj = null;
 	for (int i=0 ; i<list.size() ; i++)
 		if (list.get(i).id == joi)
 		{
-			CoordObject obj = list.get(i);
+			obj = list.get(i);
 			for (int j=0 ; j<obj.users.size() ; j++)
 			{
-				if (obj.state.get(j) == W)
+				if (obj.state.get(j) == States.W)
 					obj.users.get(j).jvnInvalidateWriterForReader(joi);
 			}
-    		return obj.jo;
+    		
 		}
+	return obj.jo;
     }
 
 	/**
@@ -137,20 +141,24 @@ public class JvnCoordImpl
 	**/
 	public Serializable jvnLockWrite(int joi, JvnRemoteServer js)
 	throws java.rmi.RemoteException, JvnException{
+	CoordObject obj = null;
 	for (int i=0 ; i<list.size() ; i++)
 		if (list.get(i).id == joi)
 		{
-			CoordObject obj = list.get(i);
+			obj = list.get(i);
 			for (int j=0 ; j<obj.users.size() ; j++)
 			{
-				if (obj.state.get(j) == W)
+				if (obj.state.get(j) == States.W)
 					obj.users.get(j).jvnInvalidateWriter(joi);
 				else
 					obj.users.get(j).jvnInvalidateReader(joi);
 			}
-    		return jo;
+    		
 		}
+	
+	return obj.jo;
 	}
+	
 
 	/**
 	* A JVN server terminates
@@ -162,7 +170,7 @@ public class JvnCoordImpl
 	for (int i=0 ; i<list.size() ; i++)
 		if (list.get(i).users.contains(js))
 		{
-			int id = list.get(i).users.indexOf(js)
+			int id = list.get(i).users.indexOf(js);
 			list.get(i).users.remove(id);
 			list.get(i).state.remove(id);
 		}
