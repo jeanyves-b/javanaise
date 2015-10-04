@@ -10,7 +10,7 @@ package jvn;
 
 
 
-import java.rmi.Naming;
+//import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import jvn.CoordObject.States;
 
 public class JvnCoordImpl 	
-              /*extends UnicastRemoteObject*/
+              extends UnicastRemoteObject
 							implements JvnRemoteCoord{
 	
 
@@ -37,16 +37,35 @@ public class JvnCoordImpl
 		try {
 			
 			JvnCoordImpl coord = new JvnCoordImpl();
-			JvnRemoteCoord coord_stub = (JvnRemoteCoord) UnicastRemoteObject.exportObject(coord, 0);
+			//JvnRemoteCoord coord_stub = new JvnCoordImpl(); //maybe doing sthg in the constructor
 			Registry registry = LocateRegistry.getRegistry();
-	        registry.rebind("Coordinator2", coord_stub);
-	        System.out.println ("Coord ready");
+			if(registry == null){
+				registry = LocateRegistry.createRegistry(1099); //port as integer
+			}
+	        	registry.rebind("Coordinator2", coord);
+	        	System.out.println ("Coord ready");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		   
 	}
+	
+
+	/*public static void main(String[] args){
+
+		try {
+			JvnCoordImpl coord = new JvnCoordImpl();
+			//JvnRemoteCoord coord_stub = (JvnRemoteCoord) UnicastRemoteObject.exportObject(coord, 0);
+			Registry registry = LocateRegistry.getRegistry();
+	        registry.rebind("Coordinator2", coord);
+	        System.out.println ("Coord ready");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		   
+	}*/
 	
 	
 	
