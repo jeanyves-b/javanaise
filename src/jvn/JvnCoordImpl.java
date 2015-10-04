@@ -8,13 +8,17 @@
 
 package jvn;
 
+
+
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.io.Serializable;
 
 
 public class JvnCoordImpl 	
-              extends UnicastRemoteObject 
+              /*extends UnicastRemoteObject */
 							implements JvnRemoteCoord{
 	
 
@@ -22,12 +26,28 @@ public class JvnCoordImpl
   * Default constructor
   * @throws JvnException
   **/
+	
+	private int counter = 0;
+
+	public static void main(String[] args){
+
+		try {
+			
+			JvnCoordImpl coord = new JvnCoordImpl();
+			JvnRemoteCoord coord_stub = (JvnRemoteCoord) UnicastRemoteObject.exportObject(coord, 0);
+			Registry registry = LocateRegistry.getRegistry();
+	        registry.rebind("Coordinator2", coord_stub);
+	        System.out.println ("Coord ready");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		   
+	}
+	
+	
 	private JvnCoordImpl() throws Exception {
 		// to be completed
-		
-		//System.out.println("This is supposed to work");
-
-		
 	}
 
   /**
@@ -35,11 +55,11 @@ public class JvnCoordImpl
   *  newly created JVN object)
   * @throws java.rmi.RemoteException,JvnException
   **/
-	public int jvnGetObjectId()
-	throws java.rmi.RemoteException,jvn.JvnException {
-    // to be completed 
-    return 0;
-	}
+  public int jvnGetObjectId()
+  throws java.rmi.RemoteException,jvn.JvnException {
+    
+    return counter++;
+  }
   
   /**
   * Associate a symbolic name with a JVN object
@@ -49,10 +69,11 @@ public class JvnCoordImpl
   * @param js  : the remote reference of the JVNServer
   * @throws java.rmi.RemoteException,JvnException
   **/
-	public void jvnRegisterObject(String jon, JvnObject jo, JvnRemoteServer js)
-	throws java.rmi.RemoteException,jvn.JvnException{
-	// to be completed 
-	}
+  public void jvnRegisterObject(String jon, JvnObject jo, JvnRemoteServer js)
+  throws java.rmi.RemoteException,jvn.JvnException{
+    // to be completed 
+	  System.out.println("En construccion...");
+  }
   
   /**
   * Get the reference of a JVN object managed by a given JVN server 
@@ -60,11 +81,12 @@ public class JvnCoordImpl
   * @param js : the remote reference of the JVNServer
   * @throws java.rmi.RemoteException,JvnException
   **/
-	public JvnObject jvnLookupObject(String jon, JvnRemoteServer js)
-	throws java.rmi.RemoteException,jvn.JvnException{
+  public JvnObject jvnLookupObject(String jon, JvnRemoteServer js)
+  throws java.rmi.RemoteException,jvn.JvnException{
     // to be completed 
+	  System.out.println("En construccion LookUp");
     return null;
-	}
+  }
   
   /**
   * Get a Read lock on a JVN object managed by a given JVN server 
@@ -73,11 +95,12 @@ public class JvnCoordImpl
   * @return the current JVN object state
   * @throws java.rmi.RemoteException, JvnException
   **/
-    public Serializable jvnLockRead(int joi, JvnRemoteServer js)
-    throws java.rmi.RemoteException, JvnException{
+   public Serializable jvnLockRead(int joi, JvnRemoteServer js)
+   throws java.rmi.RemoteException, JvnException{
+	   System.out.println("En construccion lockRead");
     // to be completed
     return null;
-    }
+   }
 
   /**
   * Get a Write lock on a JVN object managed by a given JVN server 
@@ -86,11 +109,12 @@ public class JvnCoordImpl
   * @return the current JVN object state
   * @throws java.rmi.RemoteException, JvnException
   **/
-	public Serializable jvnLockWrite(int joi, JvnRemoteServer js)
-	throws java.rmi.RemoteException, JvnException{
+   public Serializable jvnLockWrite(int joi, JvnRemoteServer js)
+   throws java.rmi.RemoteException, JvnException{
     // to be completed
+	   System.out.println("En construccion LockWrite");
     return null;
-	}
+   }
 
 	/**
 	* A JVN server terminates
@@ -98,8 +122,10 @@ public class JvnCoordImpl
 	* @throws java.rmi.RemoteException, JvnException
 	**/
     public void jvnTerminate(JvnRemoteServer js)
-	throws java.rmi.RemoteException, JvnException {
+	 throws java.rmi.RemoteException, JvnException {
 	 // to be completed
+    	
+    	System.out.println("En construccion Terminate");
     }
 }
 

@@ -29,7 +29,7 @@ public interface JvnObject extends Serializable {
 	* @throws JvnException
 	**/
 	public void jvnLockWrite()
-    throws jvn.JvnException; 
+     	throws jvn.JvnException; 
 
 	/**
 	* Unlock  the object 
@@ -58,7 +58,7 @@ public interface JvnObject extends Serializable {
 	* Invalidate the Read lock of the JVN object 
 	* @throws JvnException
 	**/
-    public void jvnInvalidateReader()
+  public void jvnInvalidateReader()
 	throws jvn.JvnException;
 	    
 	/**
@@ -66,7 +66,7 @@ public interface JvnObject extends Serializable {
 	* @return the current JVN object state
 	* @throws JvnException
 	**/
-    public Serializable jvnInvalidateWriter()
+  public Serializable jvnInvalidateWriter()
 	throws jvn.JvnException;
 	
 	/**
@@ -74,6 +74,6 @@ public interface JvnObject extends Serializable {
 	* @return the current JVN object state
 	* @throws JvnException
 	**/
-    public Serializable jvnInvalidateWriterForReader()
-	throws jvn.JvnException;	
+   public Serializable jvnInvalidateWriterForReader()
+	 throws jvn.JvnException;	
 }
