@@ -43,10 +43,15 @@ public class JvnServerImpl
 		
 		// I download server's stubs ==> must set a SecurityManager 
         System.setSecurityManager(new RMISecurityManager());
+        
+        //System.out.println("before");
+        //System.setProperty("java.security.policy","file:///C:/Users/AngieOB/workspace2/JAVANAISE2_versioned/java.policy");
+        //System.out.println("after");
 
         try 
         { 
-        	 registry = LocateRegistry.getRegistry("localhost");
+        	 registry = LocateRegistry.getRegistry("localhost",1414);
+        	 System.out.println("the registry "+registry);
              coord = (JvnRemoteCoord) registry.lookup("Coordinator2");
         	
            //coord = (JvnRemoteCoord) Naming.lookup("//localhost/Coordinator");         //objectname in registry 
@@ -65,9 +70,13 @@ public class JvnServerImpl
     * @throws JvnException
     **/
 	public static JvnServerImpl jvnGetServer() {
+		System.out.println("get server");
+		System.out.println("JS "+js);
 		if (js == null){
+			
 			try {
 				js = new JvnServerImpl();
+				System.out.println("Creates new jvn server");
 			} catch (Exception e) {
 				return null;
 			}

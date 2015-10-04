@@ -11,6 +11,7 @@ package jvn;
 
 
 //import java.rmi.Naming;
+import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -38,11 +39,14 @@ public class JvnCoordImpl
 			
 			JvnCoordImpl coord = new JvnCoordImpl();
 			//JvnRemoteCoord coord_stub = new JvnCoordImpl(); //maybe doing sthg in the constructor
-			Registry registry = LocateRegistry.getRegistry();
-			if(registry == null){
-				registry = LocateRegistry.createRegistry(1099); //port as integer
-			}
-	        	registry.rebind("Coordinator2", coord);
+			//Registry registry = LocateRegistry.getRegistry();
+			//System.out.println("registry: "+registry.toString());
+			/*if(registry == null){*/
+				System.out.println("reg");
+				Registry registry = LocateRegistry.createRegistry(1414); //port as integer
+				System.out.println("registry  "+registry);
+			//}
+	        	registry.bind("Coordinator2", coord); //registry.bind Naming
 	        	System.out.println ("Coord ready");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
