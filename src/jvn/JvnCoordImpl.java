@@ -44,7 +44,7 @@ public class JvnCoordImpl
 	
 	/**
 	* Default constructor
-	* @throws JvnException
+	* @throws JvnException²
 	**/
 	private JvnCoordImpl() throws Exception {
 		count = 0;

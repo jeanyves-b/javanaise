@@ -31,16 +31,21 @@ public class Irc {
 		   
 		// initialize JVN
 		JvnServerImpl js = JvnServerImpl.jvnGetServer();
+		System.out.println("server ok");
 		
 		// look up the IRC object in the JVN server
 		// if not found, create it, and register it in the JVN server
 		JvnObject jo = js.jvnLookupObject("IRC");
-		   
+		System.out.println("object tried : " + jo);
+
 		if (jo == null) {
 			jo = js.jvnCreateObject((Serializable) new Sentence());
 			// after creation, I have a write lock on the object
+			System.out.println("object created : " + jo);
 			jo.jvnUnLock();
+			System.out.println("unlock");
 			js.jvnRegisterObject("IRC", jo);
+			System.out.println("object created");
 		}
 		// create the graphical part of the Chat application
 		 new Irc(jo);
@@ -52,7 +57,7 @@ public class Irc {
 
   /**
    * IRC Constructor
-   @param jo the JVN object representing the Chat
+   * @param jo the JVN object representing the Chat
    **/
 	public Irc(JvnObject jo) {
 		sentence = jo;

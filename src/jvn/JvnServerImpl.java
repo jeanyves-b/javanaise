@@ -94,13 +94,13 @@ public class JvnServerImpl
 	**/
 	public  JvnObject jvnCreateObject(Serializable o)
 	throws jvn.JvnException { 
-		
+
 		JvnObject obj = null;
-		
 		
 		try {
 			obj = new JvnObjectImpl(o, coord.jvnGetObjectId());
 			jvnObjs.add(obj);
+			System.out.println("obj : "+ obj);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
