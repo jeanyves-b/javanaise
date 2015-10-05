@@ -44,11 +44,7 @@ public class Irc {
 			// after creation, I have a write lock on the object
 			System.out.println("object created : " + jo);
 			jo.jvnUnLock();
-<<<<<<< HEAD
-			
-=======
 			System.out.println("unlock");
->>>>>>> ba22ccd3c9b367bdc703d2cea568a2311bfe8c6b
 			js.jvnRegisterObject("IRC", jo);
 			System.out.println("object created");
 		}
