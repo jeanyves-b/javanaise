@@ -8,9 +8,6 @@
 
 package jvn;
 
-
-
-//import java.rmi.Naming;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -23,7 +20,7 @@ import jvn.CoordObject.States;
 public class JvnCoordImpl 	
               extends UnicastRemoteObject
 							implements JvnRemoteCoord{
-	
+
 
   /**
   * Default constructor
@@ -34,44 +31,16 @@ public class JvnCoordImpl
 	public ArrayList<CoordObject> list = new ArrayList<CoordObject>();
 
 	public static void main(String[] args){
-
-		try {
-			
-			JvnCoordImpl coord = new JvnCoordImpl();
-			//JvnRemoteCoord coord_stub = new JvnCoordImpl(); //maybe doing sthg in the constructor
-			//Registry registry = LocateRegistry.getRegistry();
-			//System.out.println("registry: "+registry.toString());
-			/*if(registry == null){*/
-				System.out.println("reg");
-				Registry registry = LocateRegistry.createRegistry(1414); //port as integer
-				System.out.println("registry  "+registry);
-			//}
-	        	registry.bind("Coordinator2", coord); //registry.bind Naming
-	        	System.out.println ("Coord ready");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		   
-	}
-	
-
-	/*public static void main(String[] args){
-
 		try {
 			JvnCoordImpl coord = new JvnCoordImpl();
-			//JvnRemoteCoord coord_stub = (JvnRemoteCoord) UnicastRemoteObject.exportObject(coord, 0);
-			Registry registry = LocateRegistry.getRegistry();
-	        registry.rebind("Coordinator2", coord);
+			Registry registry = LocateRegistry.createRegistry(1414);
+	        registry.bind("Coordinator2", coord);
 	        System.out.println ("Coord ready");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		   
-	}*/
-	
-	
+		}   
+	}	
 	
 	/**
 	* Default constructor
@@ -110,10 +79,7 @@ public class JvnCoordImpl
 		if (obj.id == -1) //just in case, security check
 			obj.id = count++;
 		obj.users.add(js);
-		
-		//I don't think we need this when we register. We'll take into account that the user will unlock before registering
-		
-		//obj.state.add(States.W);
+		obj.state.add(States.W);
 		list.add(obj);
 	}
 

@@ -3,8 +3,7 @@ package jvn;
 import java.util.ArrayList;
 import java.io.*;
 
-public class CoordObject
-{
+public class CoordObject {
 	int id;
 	String name;
 	JvnObject jo;

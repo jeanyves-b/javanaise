@@ -39,22 +39,11 @@ public class JvnServerImpl
   **/
 	private JvnServerImpl() throws Exception {
 		super();
-		// to be completed
-		
-		// I download server's stubs ==> must set a SecurityManager 
-        System.setSecurityManager(new RMISecurityManager());
-        
-        //System.out.println("before");
-        //System.setProperty("java.security.policy","file:///C:/Users/AngieOB/workspace2/JAVANAISE2_versioned/java.policy");
-        //System.out.println("after");
-
         try 
         { 
         	 registry = LocateRegistry.getRegistry("localhost",1414);
         	 System.out.println("the registry "+registry);
              coord = (JvnRemoteCoord) registry.lookup("Coordinator2");
-        	
-           //coord = (JvnRemoteCoord) Naming.lookup("//localhost/Coordinator");         //objectname in registry 
         } 
         catch (Exception e) 
         { 

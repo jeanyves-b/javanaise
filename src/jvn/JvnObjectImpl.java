@@ -87,7 +87,7 @@ public class JvnObjectImpl implements JvnObject {
 	    	state = States.RC;
 	    }else if(state == States.W)
 	    {
-	    	state = States.WC; //cuando estará en WC y cuando en RWC?
+	    	state = States.WC; //cuando estara en WC y cuando en RWC?
 	    }
 		state = States.NL;
 		notifyAll();
