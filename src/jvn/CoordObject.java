@@ -8,7 +8,7 @@ public class CoordObject
 	int id;
 	String name;
 	JvnObject jo;
-	ArrayList <JvnRemoteServer> users = new ArrayList();
-	enum States {R, W}
-	ArrayList <States> state = new ArrayList();
+	ArrayList <JvnRemoteServer> users = new ArrayList<JvnRemoteServer>();
+	static enum States {R, W, NL}
+	ArrayList <States> state = new ArrayList<States>();
 }

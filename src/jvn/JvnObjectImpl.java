@@ -80,16 +80,13 @@ public class JvnObjectImpl implements JvnObject {
 	**/
 	public synchronized void jvnUnLock() throws jvn.JvnException{
 		
-		if(state != States.NL)
-			//tell the server //What to do in the case where it is recently created and I have the write lock?
-
 		if(state == States.R){
 	    	state = States.RC;
 	    }else if(state == States.W)
 	    {
-	    	state = States.WC; //cuando estará en WC y cuando en RWC?
+	    	state = States.WC; //when will it be in WC and when in RWC?
 	    }
-		state = States.NL;
+		//state = States.NL;
 		notifyAll();
 	}
 	
@@ -107,10 +104,7 @@ public class JvnObjectImpl implements JvnObject {
 	* @throws JvnException
 	**/
 	public synchronized Serializable jvnGetObjectState() throws jvn.JvnException{
-		
-		
 		return appObject;
-		
 	}
 	
 	
@@ -120,24 +114,21 @@ public class JvnObjectImpl implements JvnObject {
 	**/
   public synchronized void jvnInvalidateReader() throws jvn.JvnException{
 	 
-	  
-	  
-	  if(state == States.RC){
-		  state = States.NL;
-	  }
+	 
 	  
 	//Supposing that the user is reading... It will wait
-	  while(state == States.R || state == States.RWC)
+	  while(state == States.R)
 	  {
 		  try {
 			wait();
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	  }
-	  
-	  
+	  state = States.NL;
+	 
 	  
   }
 	    
@@ -153,12 +144,13 @@ public class JvnObjectImpl implements JvnObject {
 			   wait();
 		   }
 		   
-		   state = States.NL;
+		   
 	   }
 	   catch(InterruptedException e){
 		   e.printStackTrace();
 	   }
 	   
+	  state = States.NL;
 	   
 	   return appObject;
 	  

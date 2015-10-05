@@ -18,7 +18,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import jvn.CoordObject.States;
+
 
 public class JvnCoordImpl 	
               extends UnicastRemoteObject
@@ -42,7 +42,7 @@ public class JvnCoordImpl
 			//Registry registry = LocateRegistry.getRegistry();
 			//System.out.println("registry: "+registry.toString());
 			/*if(registry == null){*/
-				System.out.println("reg");
+				
 				Registry registry = LocateRegistry.createRegistry(1414); //port as integer
 				System.out.println("registry  "+registry);
 			//}
@@ -89,8 +89,8 @@ public class JvnCoordImpl
 	**/
 	public int jvnGetObjectId()
 	throws java.rmi.RemoteException,jvn.JvnException {
-		count++;
-	    return count -1;
+		
+	    return count++;
 	}
 
 
@@ -112,8 +112,7 @@ public class JvnCoordImpl
 		obj.users.add(js);
 		
 		//I don't think we need this when we register. We'll take into account that the user will unlock before registering
-		
-		//obj.state.add(States.W);
+		obj.state.add(CoordObject.States.NL);
 		list.add(obj);
 	}
 
@@ -147,7 +146,7 @@ public class JvnCoordImpl
 			obj = list.get(i);
 			for (int j=0 ; j<obj.users.size() ; j++)
 			{
-				if (obj.state.get(j) == States.W)
+				if (obj.state.get(j) == CoordObject.States.W)
 					obj.users.get(j).jvnInvalidateWriterForReader(joi);
 			}
     		
@@ -171,7 +170,7 @@ public class JvnCoordImpl
 			obj = list.get(i);
 			for (int j=0 ; j<obj.users.size() ; j++)
 			{
-				if (obj.state.get(j) == States.W)
+				if (obj.state.get(j) == CoordObject.States.W)
 					obj.users.get(j).jvnInvalidateWriter(joi);
 				else
 					obj.users.get(j).jvnInvalidateReader(joi);

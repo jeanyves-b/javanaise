@@ -39,21 +39,19 @@ public class JvnServerImpl
   **/
 	private JvnServerImpl() throws Exception {
 		super();
-		// to be completed
 		
 		// I download server's stubs ==> must set a SecurityManager 
-        System.setSecurityManager(new RMISecurityManager());
-        
-        //System.out.println("before");
-        //System.setProperty("java.security.policy","file:///C:/Users/AngieOB/workspace2/JAVANAISE2_versioned/java.policy");
-        //System.out.println("after");
+        //System.setSecurityManager(new RMISecurityManager());
+       
 
+		jvnObjs = new ArrayList<JvnObject>();
         try 
         { 
         	 registry = LocateRegistry.getRegistry("localhost",1414);
         	 System.out.println("the registry "+registry);
              coord = (JvnRemoteCoord) registry.lookup("Coordinator2");
         	
+             System.out.println("The coordinator "+coord);
            //coord = (JvnRemoteCoord) Naming.lookup("//localhost/Coordinator");         //objectname in registry 
         } 
         catch (Exception e) 
@@ -108,15 +106,17 @@ public class JvnServerImpl
 		
 		JvnObject obj = null;
 		
-		
+		System.out.println("create object");
 		try {
 			obj = new JvnObjectImpl(o, coord.jvnGetObjectId());
 			jvnObjs.add(obj);
+			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		
+		System.out.println("the object "+obj.jvnGetObjectId());
 		return obj; 
 	}
 	
