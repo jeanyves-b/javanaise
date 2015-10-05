@@ -8,9 +8,6 @@
 
 package jvn;
 
-
-
-//import java.rmi.Naming;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -23,7 +20,7 @@ import java.util.ArrayList;
 public class JvnCoordImpl 	
               extends UnicastRemoteObject
 							implements JvnRemoteCoord{
-	
+
 
   /**
   * Default constructor
@@ -38,14 +35,10 @@ public class JvnCoordImpl
 		try {
 			
 			JvnCoordImpl coord = new JvnCoordImpl();
-			//JvnRemoteCoord coord_stub = new JvnCoordImpl(); //maybe doing sthg in the constructor
-			//Registry registry = LocateRegistry.getRegistry();
-			//System.out.println("registry: "+registry.toString());
-			/*if(registry == null){*/
-				
+
 				Registry registry = LocateRegistry.createRegistry(1414); //port as integer
 				System.out.println("registry  "+registry);
-			//}
+
 	        	registry.bind("Coordinator2", coord); //registry.bind Naming
 	        	System.out.println ("Coord ready");
 		} catch (Exception e) {
@@ -56,26 +49,10 @@ public class JvnCoordImpl
 	}
 	
 
-	/*public static void main(String[] args){
 
-		try {
-			JvnCoordImpl coord = new JvnCoordImpl();
-			//JvnRemoteCoord coord_stub = (JvnRemoteCoord) UnicastRemoteObject.exportObject(coord, 0);
-			Registry registry = LocateRegistry.getRegistry();
-	        registry.rebind("Coordinator2", coord);
-	        System.out.println ("Coord ready");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		   
-	}*/
-	
-	
-	
 	/**
 	* Default constructor
-	* @throws JvnException
+	* @throws JvnException²
 	**/
 	private JvnCoordImpl() throws Exception {
 		count = 0;
@@ -110,9 +87,10 @@ public class JvnCoordImpl
 		if (obj.id == -1) //just in case, security check
 			obj.id = count++;
 		obj.users.add(js);
-		
+
 		//I don't think we need this when we register. We'll take into account that the user will unlock before registering
 		obj.state.add(CoordObject.States.NL);
+
 		list.add(obj);
 	}
 
