@@ -44,9 +44,9 @@ public class JvnServerImpl
 
         try 
         { 
-        	 registry = LocateRegistry.getRegistry("localhost",1414);
-        	 System.out.println("the registry "+registry);
-             coord = (JvnRemoteCoord) registry.lookup("Coordinator2");
+        	registry = LocateRegistry.getRegistry("localhost",1414);
+        	//System.out.println("the registry "+registry);
+            coord = (JvnRemoteCoord) registry.lookup("Coordinator2");
         } 
         catch (Exception e) 
         { 
@@ -62,13 +62,13 @@ public class JvnServerImpl
     * @throws JvnException
     **/
 	public static JvnServerImpl jvnGetServer() {
-		System.out.println("get server");
-		System.out.println("JS "+js);
+		//System.out.println("get server");
+		//System.out.println("JS "+js);
 		if (js == null){
 			
 			try {
 				js = new JvnServerImpl();
-				System.out.println("Creates new jvn server");
+				//System.out.println("Creates new jvn server");
 			} catch (Exception e) {
 				return null;
 			}
@@ -109,7 +109,7 @@ public class JvnServerImpl
 			e.printStackTrace();
 		} 
 		
-		System.out.println("the object "+obj.jvnGetObjectId());
+		//System.out.println("the object "+obj.jvnGetObjectId());
 		return obj; 
 	}
 	
