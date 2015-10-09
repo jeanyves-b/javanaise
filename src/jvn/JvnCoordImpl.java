@@ -102,9 +102,16 @@ public class JvnCoordImpl
 	**/
 	public JvnObject jvnLookupObject(String jon, JvnRemoteServer js)
 	throws java.rmi.RemoteException,jvn.JvnException{
-	for (int i=0 ; i<list.size() ; i++)
-    	if (list.get(i).name == jon)
+	for (int i=0 ; i<list.size() ; i++){
+		System.out.println(list.get(i).name);
+    	if (list.get(i).name.equalsIgnoreCase(jon))
+    	{
+    		System.out.println("It found the object");
+    		System.out.println("The object: "+list.get(i).jo);
     		return list.get(i).jo;
+    	}
+    		
+	}
     return null;
 	}
   

@@ -25,6 +25,10 @@ public class JvnServerImpl
               extends UnicastRemoteObject 
 							implements JvnLocalServer, JvnRemoteServer{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static JvnRemoteCoord coord;
 	// A JVN server is managed as a singleton 
 	private static JvnServerImpl js = null;
@@ -45,7 +49,6 @@ public class JvnServerImpl
         try 
         { 
         	registry = LocateRegistry.getRegistry("localhost",1414);
-        	//System.out.println("the registry "+registry);
             coord = (JvnRemoteCoord) registry.lookup("Coordinator2");
         } 
         catch (Exception e) 
@@ -146,7 +149,9 @@ public class JvnServerImpl
 		
 		JvnObject obj = null;
 		 try {
+			 
 			obj = coord.jvnLookupObject(jon, js);
+			System.out.println("LookUpObject "+obj);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

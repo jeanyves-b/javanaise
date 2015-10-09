@@ -14,11 +14,13 @@ import java.awt.event.*;
 import jvn.*;
 import java.io.*;
 
+import javax.swing.JFrame;
+
 
 public class Irc {
 	public TextArea		text;
 	public TextField	data;
-	Frame 			frame;
+	JFrame 			frame;
 	JvnObject       sentence;
 
 
@@ -37,6 +39,8 @@ public class Irc {
 		// if not found, create it, and register it in the JVN server
 		JvnObject jo = js.jvnLookupObject("IRC");
 		//System.out.println("object tried : " + jo);
+		
+		System.out.println("The object was found "+jo);
 
 		if (jo == null) {
 			//System.out.println("the creation is being done");
@@ -48,7 +52,7 @@ public class Irc {
 			js.jvnRegisterObject("IRC", jo);
 			//System.out.println("object created");
 		}
-		//System.out.println("patate");
+		
 		// create the graphical part of the Chat application
 
 		new Irc(jo);
@@ -64,7 +68,7 @@ public class Irc {
    **/
 	public Irc(JvnObject jo) {
 		sentence = jo;
-		frame=new Frame();
+		frame=new JFrame();
 		frame.setLayout(new GridLayout(1,1));
 		text=new TextArea(10,60);
 		text.setEditable(false);
@@ -79,6 +83,7 @@ public class Irc {
 		write_button.addActionListener(new writeListener(this));
 		frame.add(write_button);
 		frame.setSize(545,201);
+		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		text.setBackground(Color.black); 
 		frame.setVisible(true);
 	}
@@ -134,7 +139,7 @@ public class Irc {
 	public void actionPerformed (ActionEvent e) {
 	   try {	
 		// get the value to be written from the buffer
-    String s = irc.data.getText();
+		   String s = irc.data.getText();
         	
     // lock the object in write mode
 		irc.sentence.jvnLockWrite();

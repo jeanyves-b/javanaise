@@ -31,11 +31,11 @@ public class JvnObjectImpl implements JvnObject {
 	int joi;
 	
 	Serializable appObject;
-	JvnLocalServer server;
+	//JvnLocalServer server;
 	
 	public JvnObjectImpl(Serializable appObject, int joi){
 		this.appObject = appObject;
-		server = JvnServerImpl.jvnGetServer();
+		//server = JvnServerImpl.jvnGetServer();
 		state = States.W; //After creation, there is a write lock in the object
 		this.joi = joi;
 	}
@@ -48,7 +48,7 @@ public class JvnObjectImpl implements JvnObject {
 		}
 		else if( state == States.NL)
 		{
-			appObject = server.jvnLockRead(joi);
+			appObject = JvnServerImpl.jvnGetServer().jvnLockRead(joi);
 			state = States.R;
 		}
 		else if(state == States.WC)
@@ -65,7 +65,7 @@ public class JvnObjectImpl implements JvnObject {
 	public synchronized void jvnLockWrite() throws jvn.JvnException{
 	
 		if(state == States.NL){
-			server.jvnLockWrite(joi);
+			JvnServerImpl.jvnGetServer().jvnLockWrite(joi);
 			state = States.W;
 		}
 		else if(state==States.WC || state == States.RWC){
@@ -102,7 +102,7 @@ public class JvnObjectImpl implements JvnObject {
 	* Get the object state
 	* @throws JvnException
 	**/
-	public synchronized Serializable jvnGetObjectState() throws jvn.JvnException{
+	public Serializable jvnGetObjectState() throws jvn.JvnException{
 		return appObject;
 	}
 	
