@@ -56,6 +56,9 @@ public interface JvnObject extends Serializable {
 	throws jvn.JvnException; 
 	
 	
+	public void jvnSetObjectState(Serializable o)
+			throws jvn.JvnException; 
+	
 	/**
 	* Invalidate the Read lock of the JVN object 
 	* @throws JvnException

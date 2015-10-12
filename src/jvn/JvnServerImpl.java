@@ -160,8 +160,7 @@ public class JvnServerImpl
 			e.printStackTrace();
 		}
 		return obj2;
-	
-		
+
 	}	
 	
 	/**

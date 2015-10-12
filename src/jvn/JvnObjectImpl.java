@@ -7,6 +7,8 @@
 
 package jvn;
 
+import irc.Sentence;
+
 import java.io.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -51,6 +53,8 @@ public class JvnObjectImpl implements JvnObject {
 		else if( state == States.NL)
 		{
 			appObject = JvnServerImpl.jvnGetServer().jvnLockRead(joi);
+			Sentence s = (Sentence) appObject;
+			System.out.println("The appObject is "+ s.read());
 			state = States.R;
 		}
 		else if(state == States.WC)
@@ -159,8 +163,8 @@ public class JvnObjectImpl implements JvnObject {
 	   }
 	   
 	  state = States.NL;
-	   
-	  System.out.println("The state went to: "+state);
+	   Sentence sent = (Sentence) appObject;
+	  System.out.println("The state went to: "+state + " sentence "+sent);
 	   return appObject;
 	  
   }
@@ -189,7 +193,6 @@ public class JvnObjectImpl implements JvnObject {
 		   e.printStackTrace();
 	   }
 	   
-	   
 	   System.out.println("The state went to: "+state);
 	   
 	   return appObject;
@@ -198,7 +201,13 @@ public class JvnObjectImpl implements JvnObject {
 
 	public Serializable jvnToString() throws JvnException {
 		// TODO Auto-generated method stub
-		
-		return state + " joi: "+joi;
+		return state + " joi: "+joi +" application object "+appObject;
 	}
+
+	public void jvnSetObjectState(Serializable o) throws JvnException {
+		appObject = o;
+		
+	}
+
+	
 }

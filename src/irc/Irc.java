@@ -41,7 +41,8 @@ public class Irc {
 		
 	
 		System.out.println("The object was found "+jo );
-
+		
+		
 		if (jo == null) {
 			//System.out.println("the creation is being done");
 			jo = js.jvnCreateObject((Serializable) new Sentence());
@@ -52,6 +53,8 @@ public class Irc {
 			
 			js.jvnRegisterObject("IRC", jo);
 			System.out.println("object created");
+		}else{
+			System.out.println("The complete obj "+jo.jvnToString());
 		}
 	
 		// create the graphical part of the Chat application
@@ -84,7 +87,22 @@ public class Irc {
 		write_button.addActionListener(new writeListener(this));
 		frame.add(write_button);
 		frame.setSize(545,201);
-		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                System.out.println("Closed");
+                try{
+                	JvnServerImpl.jvnGetServer().jvnTerminate();
+                }catch(Exception exc){
+                	System.out.println("An exception: "+exc);
+                }
+                
+                e.getWindow().dispose();
+            }
+        });
 		text.setBackground(Color.black); 
 		frame.setVisible(true);
 	}

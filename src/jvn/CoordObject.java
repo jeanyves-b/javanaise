@@ -10,4 +10,6 @@ public class CoordObject {
 	String name;
 	static enum States {R, W, NL}
 	HashMap<JvnRemoteServer, States> serverState = new HashMap<JvnRemoteServer, States>();
+	States state;
+	
 }
