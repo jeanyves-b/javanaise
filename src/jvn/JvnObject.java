@@ -17,6 +17,8 @@ import java.io.*;
 
 public interface JvnObject extends Serializable {
 
+	
+	public enum States{NL, R, W, RC, WC, RWC};
 	/**
 	* Get a Read lock on the object 
 	* @throws JvnException
@@ -75,5 +77,8 @@ public interface JvnObject extends Serializable {
 	* @throws JvnException
 	**/
    public Serializable jvnInvalidateWriterForReader()
-	 throws jvn.JvnException;	
+	 throws jvn.JvnException;
+
+   public Serializable jvnToString()
+	 throws jvn.JvnException;
 }

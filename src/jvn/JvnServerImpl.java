@@ -19,6 +19,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.io.*;
 
+import jvn.CoordObject.States;
+
 
 
 public class JvnServerImpl 	
@@ -65,13 +67,12 @@ public class JvnServerImpl
     * @throws JvnException
     **/
 	public static JvnServerImpl jvnGetServer() {
-		//System.out.println("get server");
-		//System.out.println("JS "+js);
+		
 		if (js == null){
 			
 			try {
 				js = new JvnServerImpl();
-				//System.out.println("Creates new jvn server");
+				
 			} catch (Exception e) {
 				return null;
 			}
@@ -104,15 +105,13 @@ public class JvnServerImpl
 		JvnObject obj = null;
 		
 		try {
-			obj = new JvnObjectImpl(o, coord.jvnGetObjectId());
+			obj = new JvnObjectImpl(o, coord.jvnGetObjectId(), JvnObject.States.W);
 			jvnObjs.add(obj);
-
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 		
-		//System.out.println("the object "+obj.jvnGetObjectId());
 		return obj; 
 	}
 	
@@ -126,14 +125,13 @@ public class JvnServerImpl
 	public  void jvnRegisterObject(String jon, JvnObject jo)
 	throws jvn.JvnException {
 		// to be completed 
-		
+
 		try {
 			coord.jvnRegisterObject(jon, jo, js);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//register the object in the server and also in the coordinator?
 		
 	}
 	
@@ -147,16 +145,23 @@ public class JvnServerImpl
 	public  JvnObject jvnLookupObject(String jon)
 	throws jvn.JvnException {
 		
-		JvnObject obj = null;
+		System.out.println("LookUpObject in JvnServerImpl ");
+		JvnObject obj = null, obj2 = null;
 		 try {
-			 
+			
 			obj = coord.jvnLookupObject(jon, js);
+			if(obj != null){
+				obj2 = new JvnObjectImpl(obj.jvnGetObjectState(), obj.jvnGetObjectId(), JvnObject.States.NL);
+				jvnObjs.add(obj2);
+			}
 			System.out.println("LookUpObject "+obj);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return obj;
+		return obj2;
+	
+		
 	}	
 	
 	/**
@@ -168,15 +173,15 @@ public class JvnServerImpl
    public Serializable jvnLockRead(int joi)
 	 throws JvnException {
 	
-	    Serializable obj = null;
+	    Serializable appobj = null;
 	   
 	    try {
-			obj = coord.jvnLockRead(joi, js);
+			appobj = coord.jvnLockRead(joi, js);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return obj;
+		return appobj;
 
 	}	
 	/**
@@ -187,11 +192,13 @@ public class JvnServerImpl
 	**/
    public Serializable jvnLockWrite(int joi)
 	 throws JvnException {
-		// to be completed 
+		System.out.println("LockWrite Server");
 	   Serializable obj = null;
 	   
 	   try {
 		obj = coord.jvnLockWrite(joi, js);
+		
+		System.out.println("lock write "+ joi);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -210,9 +217,13 @@ public class JvnServerImpl
   public void jvnInvalidateReader(int joi)
 	throws java.rmi.RemoteException,jvn.JvnException {
 		
+	  
+	  System.out.println("jvnInvalidateReader method in server");
 	  for(JvnObject obj: jvnObjs){
+		  System.out.println("jvnObjects "+obj);
 		  if(obj.jvnGetObjectId() == joi)
 		  {
+			  System.out.println("There will be an invalidation of the object " + obj);
 			  obj.jvnInvalidateReader();
 		  }
 	  }

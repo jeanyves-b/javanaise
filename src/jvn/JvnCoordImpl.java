@@ -14,6 +14,9 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import jvn.CoordObject.States;
 
 
 
@@ -29,6 +32,7 @@ public class JvnCoordImpl
 	
 	public int count;
 	public ArrayList<CoordObject> list = new ArrayList<CoordObject>();
+	public HashMap<Integer, CoordObject> list2 = new HashMap<Integer, CoordObject>();
 
 	public static void main(String[] args){
 
@@ -66,7 +70,6 @@ public class JvnCoordImpl
 	**/
 	public int jvnGetObjectId()
 	throws java.rmi.RemoteException,jvn.JvnException {
-		
 	    return count++;
 	}
 
@@ -81,17 +84,22 @@ public class JvnCoordImpl
 	**/
 	public void jvnRegisterObject(String jon, JvnObject jo, JvnRemoteServer js)
 	throws java.rmi.RemoteException,jvn.JvnException{
-		CoordObject obj = new CoordObject();
-		obj.name = jon;
-		obj.id = jo.jvnGetObjectId();
-		if (obj.id == -1) //just in case, security check
-			obj.id = count++;
-		obj.users.add(js);
-
-		//I don't think we need this when we register. We'll take into account that the user will unlock before registering
-		obj.state.add(CoordObject.States.NL);
-
-		list.add(obj);
+		
+		int joi = jo.jvnGetObjectId();
+		if(list2.containsKey(joi)){
+			list2.get(joi).serverState.put(js, States.W);
+			System.out.println("The coord found the object "+jon);
+		}else
+		{
+			System.out.println("sthg");
+			CoordObject obj = new CoordObject();
+			obj.jo = jo;
+			obj.name = jon;
+			obj.serverState.put(js, States.W);
+			list2.put(joi, obj);
+		}
+		
+		printCoordState();
 	}
 
 	/**
@@ -102,17 +110,19 @@ public class JvnCoordImpl
 	**/
 	public JvnObject jvnLookupObject(String jon, JvnRemoteServer js)
 	throws java.rmi.RemoteException,jvn.JvnException{
-	for (int i=0 ; i<list.size() ; i++){
-		System.out.println(list.get(i).name);
-    	if (list.get(i).name.equalsIgnoreCase(jon))
-    	{
-    		System.out.println("It found the object");
-    		System.out.println("The object: "+list.get(i).jo);
-    		return list.get(i).jo;
-    	}
-    		
-	}
-    return null;
+		
+		System.out.println("The LookUpObject in coord");
+		for (CoordObject obj : list2.values()) {
+			if(obj.name.equalsIgnoreCase(jon)){
+				
+				obj.serverState.put(js, States.NL);
+				printCoordState();
+				return obj.jo;
+			}
+		}
+		printCoordState();
+		System.out.println("print");
+		return null;
 	}
   
   /**
@@ -124,19 +134,27 @@ public class JvnCoordImpl
   **/
     public Serializable jvnLockRead(int joi, JvnRemoteServer js)
     throws java.rmi.RemoteException, JvnException{
-    	CoordObject obj = null;
-	for (int i=0 ; i<list.size() ; i++)
-		if (list.get(i).id == joi)
-		{
-			obj = list.get(i);
-			for (int j=0 ; j<obj.users.size() ; j++)
-			{
-				if (obj.state.get(j) == CoordObject.States.W)
-					obj.users.get(j).jvnInvalidateWriterForReader(joi);
-			}
-    		
-		}
-	return obj.jo;
+    	
+    	System.out.println("In the jvnLockRead");
+    	Serializable appObj = null;
+    	CoordObject obj = list2.get(joi);
+    	
+    	for(JvnRemoteServer server: obj.serverState.keySet()){
+    		System.out.println("Server state "+server+ "es: "+obj.serverState.get(server));
+    		if(obj.serverState.get(server).compareTo(States.W) == 0){
+    			if(!server.equals(js)){
+    				appObj = server.jvnInvalidateWriterForReader(joi);
+        			obj.serverState.put(server, States.R);
+        			System.out.println("Invalidating the writer for the server "+server);
+    			}
+    		}
+    	}
+    	
+    	obj.serverState.put(js, States.R);
+    	
+    	printCoordState();
+    	
+    	return appObj;
     }
 
 	/**
@@ -148,22 +166,30 @@ public class JvnCoordImpl
 	**/
 	public Serializable jvnLockWrite(int joi, JvnRemoteServer js)
 	throws java.rmi.RemoteException, JvnException{
-	CoordObject obj = null;
-	for (int i=0 ; i<list.size() ; i++)
-		if (list.get(i).id == joi)
-		{
-			obj = list.get(i);
-			for (int j=0 ; j<obj.users.size() ; j++)
-			{
-				if (obj.state.get(j) == CoordObject.States.W)
-					obj.users.get(j).jvnInvalidateWriter(joi);
-				else
-					obj.users.get(j).jvnInvalidateReader(joi);
-			}
-    		
-		}
+		
+		Serializable appObj = null;
+    	CoordObject obj = list2.get(joi);
+    	System.out.println("Lock Write in Coord");
+    	for(JvnRemoteServer server: obj.serverState.keySet()){
+    		if(!server.equals(js)){
+    			if(obj.serverState.get(server).equals(States.W)){
+        			appObj = server.jvnInvalidateWriter(joi);
+        			System.out.println("LockWrite- Invalidating the writer for the server "+server);
+        		}
+        		else{
+        			System.out.println("Invalidating the reader for the server 1"+server);
+        			server.jvnInvalidateReader(joi);
+        			System.out.println("Invalidating the reader for the server "+server);
+        		}
+        		obj.serverState.put(server, States.NL);
+    		}
+    	}
+    	
+    	obj.serverState.put(js, States.W);
+    	
+    	printCoordState();
+    	return appObj;
 	
-	return obj.jo;
 	}
 	
 
@@ -174,14 +200,33 @@ public class JvnCoordImpl
 	**/
     public void jvnTerminate(JvnRemoteServer js)
 	throws java.rmi.RemoteException, JvnException {
-	for (int i=0 ; i<list.size() ; i++)
-		if (list.get(i).users.contains(js))
-		{
-			int id = list.get(i).users.indexOf(js);
-			list.get(i).users.remove(id);
-			list.get(i).state.remove(id);
-		}
+    	
+    	
+    	for(Integer i: list2.keySet()){
+    		list2.get(i).serverState.remove(js);
+    	}
+    	
     }
+    
+    private void printCoordState(){
+    	CoordObject cord;
+    	for(Integer i: list2.keySet()){
+    		cord = list2.get(i);
+    		
+    		System.out.println("Object Name: "+cord.name + " The object: "+cord.jo);
+    		System.out.println("The server state: ");
+    		
+    		for(JvnRemoteServer server : cord.serverState.keySet()){
+    			
+    			System.out.println("The server "+server+" and state "+ cord.serverState.get(server));
+    		}
+    		
+    		cord.serverState.toString();
+    		
+    		
+    	}
+    }
+	
 }
 
  

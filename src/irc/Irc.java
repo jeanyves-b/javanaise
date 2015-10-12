@@ -38,9 +38,9 @@ public class Irc {
 		// look up the IRC object in the JVN server
 		// if not found, create it, and register it in the JVN server
 		JvnObject jo = js.jvnLookupObject("IRC");
-		//System.out.println("object tried : " + jo);
 		
-		System.out.println("The object was found "+jo);
+	
+		System.out.println("The object was found "+jo );
 
 		if (jo == null) {
 			//System.out.println("the creation is being done");
@@ -48,11 +48,12 @@ public class Irc {
 			// after creation, I have a write lock on the object
 			//System.out.println("object created : " + jo);
 			jo.jvnUnLock();
-			//System.out.println("unlock");
+			
+			
 			js.jvnRegisterObject("IRC", jo);
-			//System.out.println("object created");
+			System.out.println("object created");
 		}
-		
+	
 		// create the graphical part of the Chat application
 
 		new Irc(jo);
@@ -142,8 +143,10 @@ public class Irc {
 		   String s = irc.data.getText();
         	
     // lock the object in write mode
+		   
+		   System.out.println("write in the action performed -------- 1");
 		irc.sentence.jvnLockWrite();
-		
+		System.out.println("write in the action performed ------- 2");
 		// invoke the method
 		((Sentence)(irc.sentence.jvnGetObjectState())).write(s);
 		

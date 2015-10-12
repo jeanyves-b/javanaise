@@ -1,13 +1,13 @@
 package jvn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.io.*;
 
 public class CoordObject {
-	int id;
-	String name;
+	
 	JvnObject jo;
-	ArrayList <JvnRemoteServer> users = new ArrayList<JvnRemoteServer>();
+	String name;
 	static enum States {R, W, NL}
-	ArrayList <States> state = new ArrayList<States>();
+	HashMap<JvnRemoteServer, States> serverState = new HashMap<JvnRemoteServer, States>();
 }

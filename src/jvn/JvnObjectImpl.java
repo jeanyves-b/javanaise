@@ -26,21 +26,23 @@ public class JvnObjectImpl implements JvnObject {
 	* @throws JvnException
 	**/
 	
-	public enum States{NL, R, W, RC, WC, RWC};
+	
 	States state = States.NL;
 	int joi;
 	
 	Serializable appObject;
 	//JvnLocalServer server;
 	
-	public JvnObjectImpl(Serializable appObject, int joi){
+	public JvnObjectImpl(Serializable appObject, int joi, JvnObject.States state){
 		this.appObject = appObject;
 		//server = JvnServerImpl.jvnGetServer();
-		state = States.W; //After creation, there is a write lock in the object
+		this.state = state; //After creation, there is a write lock in the object
 		this.joi = joi;
 	}
 	
 	public synchronized void jvnLockRead() throws jvn.JvnException{
+		
+		 System.out.println("jvnLockRead en jvnObjectImpl");
 		
 		if(state == States.RC)
 		{
@@ -55,7 +57,7 @@ public class JvnObjectImpl implements JvnObject {
 		{
 			state = States.RWC;
 		}
-		
+		 System.out.println("The state went to: "+state);
 	} 
 
 	/**
@@ -64,14 +66,16 @@ public class JvnObjectImpl implements JvnObject {
 	**/
 	public synchronized void jvnLockWrite() throws jvn.JvnException{
 	
-		if(state == States.NL){
+		System.out.println("jvnLockWrite en jvnObjectImpl");
+		if(state == States.NL || state == States.RC){
 			JvnServerImpl.jvnGetServer().jvnLockWrite(joi);
+			System.out.println("LockWrite object");
 			state = States.W;
 		}
 		else if(state==States.WC || state == States.RWC){
 			state = States.W;
 		}
-		
+		 System.out.println("The state went to: "+state);
 	} 
 
 	/**
@@ -80,12 +84,14 @@ public class JvnObjectImpl implements JvnObject {
 	**/
 	public synchronized void jvnUnLock() throws jvn.JvnException{
 		
+		System.out.println("Unlock en jvnObjectImpl");
 		if(state == States.R){
 	    	state = States.RC;
-	    }else if(state == States.W)
-	    {
+	    }else if(state == States.W){
 	    	state = States.WC; //when will it be in WC and when in RWC? In the lock read
 	    }
+		
+		 System.out.println("The state went to: "+state);
 		notifyAll();
 	}
 	
@@ -113,7 +119,7 @@ public class JvnObjectImpl implements JvnObject {
 	**/
   public synchronized void jvnInvalidateReader() throws jvn.JvnException{
 	 
-	 
+	  System.out.println("jvnInvalidateReader en jvnObjectImpl");
 	  
 	//Supposing that the user is reading... It will wait
 	  while(state == States.R)
@@ -126,8 +132,10 @@ public class JvnObjectImpl implements JvnObject {
 			e.printStackTrace();
 		}
 	  }
+	  
+	  
 	  state = States.NL;
-	 
+	  System.out.println("The state went to: "+state);
 	  
   }
 	    
@@ -138,6 +146,7 @@ public class JvnObjectImpl implements JvnObject {
 	**/
   public synchronized Serializable jvnInvalidateWriter() throws jvn.JvnException{
 	
+	  System.out.println("jvnInvalidateWriter en jvnObjectImpl");
 	  try{
 		   while(state == States.W){
 			   wait();
@@ -151,6 +160,7 @@ public class JvnObjectImpl implements JvnObject {
 	   
 	  state = States.NL;
 	   
+	  System.out.println("The state went to: "+state);
 	   return appObject;
 	  
   }
@@ -162,6 +172,7 @@ public class JvnObjectImpl implements JvnObject {
 	**/
    public synchronized Serializable jvnInvalidateWriterForReader() throws jvn.JvnException{
 	
+	   System.out.println("jvnInvalidateWriterForReader en jvnObjectImpl");
 	   try{
 		   
 		   if(state == States.RWC){
@@ -179,7 +190,15 @@ public class JvnObjectImpl implements JvnObject {
 	   }
 	   
 	   
+	   System.out.println("The state went to: "+state);
+	   
 	   return appObject;
 	   
    }
+
+	public Serializable jvnToString() throws JvnException {
+		// TODO Auto-generated method stub
+		
+		return state + " joi: "+joi;
+	}
 }
