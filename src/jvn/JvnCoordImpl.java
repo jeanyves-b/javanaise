@@ -8,13 +8,10 @@
 
 package jvn;
 
-import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jvn.CoordObject.States;
@@ -27,6 +24,10 @@ public class JvnCoordImpl
 
 
   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+/**
   * Default constructor
   * @throws JvnException
   **/
@@ -85,6 +86,7 @@ public class JvnCoordImpl
 	* @param js  : the remote reference of the JVNServer
 	* @throws java.rmi.RemoteException,JvnException
 	**/
+	
 	public void jvnRegisterObject(String jon, JvnObject jo, JvnRemoteServer js)
 	throws java.rmi.RemoteException,jvn.JvnException{
 		

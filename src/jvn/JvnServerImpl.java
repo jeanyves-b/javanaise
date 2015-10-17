@@ -10,18 +10,12 @@ package jvn;
 
 
 
-import java.rmi.Naming;
-import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.io.*;
-
-import jvn.CoordObject.States;
-
-
 
 public class JvnServerImpl 	
               extends UnicastRemoteObject 
