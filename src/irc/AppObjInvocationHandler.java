@@ -44,7 +44,7 @@ public class AppObjInvocationHandler implements InvocationHandler {
 			throws Throwable {
 		try {
 			Object result = m.invoke(ob.jvnGetObjectState(), arg);
-			} catch (Exception e) {…}
+			} catch (Exception e) {...}
 			return result; 
 		
 		
