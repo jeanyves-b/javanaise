@@ -153,7 +153,7 @@ public class JvnCoordImpl
     		if(obj.serverState.get(server).compareTo(States.W) == 0){
     			if(!server.equals(js)){
     				appObj = server.jvnInvalidateWriterForReader(joi);
-    				//Mettre à jour le appObj dedans le jvnObject in the coordinator?
+    				//Mettre a jour le appObj dedans le jvnObject in the coordinator?
     				obj.jo.jvnSetObjectState(appObj);
         			obj.serverState.put(server, States.R);
         			System.out.println("Invalidating the writer for the server "+server);
