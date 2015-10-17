@@ -22,6 +22,8 @@ public class Irc {
 	public TextField	data;
 	JFrame 			frame;
 	JvnObject       sentence;
+	
+	//Sentence       sentence;
 
 
   /**
@@ -37,20 +39,23 @@ public class Irc {
 		
 		// look up the IRC object in the JVN server
 		// if not found, create it, and register it in the JVN server
+		   
+		   //TODO: Essayer avec la classe et pas l'interface.
+		//SentenceInt sent = (SentenceInt) AppObjInvocationHandler.LookupObject("IRC");
+		
 		JvnObject jo = js.jvnLookupObject("IRC");
-		
-	
-		System.out.println("The object was found "+jo );
-		
+		//System.out.println("The object was found "+sent );
 		
 		if (jo == null) {
-			//System.out.println("the creation is being done");
+			
+			
+			//SentenceInt sent = (SentenceInt) AppObjInvocationHandler.RegisterObject("IRC", new Sentence());
+			
 			jo = js.jvnCreateObject((Serializable) new Sentence());
 			// after creation, I have a write lock on the object
 			//System.out.println("object created : " + jo);
 			jo.jvnUnLock();
-			
-			
+
 			js.jvnRegisterObject("IRC", jo);
 			System.out.println("object created");
 		}else{

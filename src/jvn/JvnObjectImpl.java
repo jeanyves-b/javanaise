@@ -91,7 +91,8 @@ public class JvnObjectImpl implements JvnObject {
 		System.out.println("Unlock en jvnObjectImpl");
 		if(state == States.R){
 	    	state = States.RC;
-	    }else if(state == States.W){
+	    }else if(state == States.W || state == States.RWC) //maybe: || state == States.RWC
+	    {
 	    	state = States.WC; //when will it be in WC and when in RWC? In the lock read
 	    }
 		
