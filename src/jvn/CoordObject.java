@@ -1,9 +1,6 @@
 package jvn;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.io.*;
 
 public class CoordObject {
 	

@@ -10,8 +10,6 @@ package jvn;
 import irc.Sentence;
 
 import java.io.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Interface of a JVN object. 
@@ -23,6 +21,10 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class JvnObjectImpl implements JvnObject {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	* Get a Read lock on the object 
 	* @throws JvnException
