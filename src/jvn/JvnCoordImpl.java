@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import jvn.CoordObject.States;
 
@@ -33,8 +34,8 @@ public class JvnCoordImpl
 	public int count;
 	//public ArrayList<CoordObject> list = new ArrayList<CoordObject>();
 	//public
-	public HashMap<Integer, CoordObject> listObjects = new HashMap<Integer, CoordObject>();
-	public HashMap<String, Integer> listLookUp = new HashMap<String, Integer>();
+	public ConcurrentHashMap<Integer, CoordObject> listObjects = new ConcurrentHashMap<Integer, CoordObject>();
+	public ConcurrentHashMap<String, Integer> listLookUp = new ConcurrentHashMap<String, Integer>();
 	
 	
 	public static void main(String[] args){
