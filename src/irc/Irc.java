@@ -45,7 +45,8 @@ public class Irc {
 		
 		System.out.println("whatever");
 		
-		sent = (SentenceInt) AppObjInvocationHandler.LookupObject("IRC");
+		//System.out.println(AppObjInvocationHandler.LookupObject("IRC").getClass().getName());
+		sent =  (SentenceInt) AppObjInvocationHandler.LookupObject("IRC");
 		
 		//System.out.println("Sent: "+sent.getClass().getName());
 		//JvnObject jo = js.jvnLookupObject("IRC");
@@ -66,6 +67,7 @@ public class Irc {
 		new Irc(sent);
 	   
 	   } catch (Exception e) {
+		   e.printStackTrace();
 		   System.out.println("IRC problem : " + e.getMessage());
 	   }
 	}
