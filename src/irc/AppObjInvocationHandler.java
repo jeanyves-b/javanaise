@@ -19,9 +19,6 @@ public class AppObjInvocationHandler implements InvocationHandler {
 		ob=o;
 	}
 
-	
-	
-	
 	public static Object LookupObject(String jon) 
 	throws jvn.JvnException{
 		
@@ -53,7 +50,6 @@ public class AppObjInvocationHandler implements InvocationHandler {
 		
 		System.out.println("RegisterObject ");
 		
-		
 		JvnObject obj = JvnServerImpl.jvnGetServer().jvnCreateObject(appObject);
 		Object o=obj.jvnGetObjectState();
 		obj.jvnUnLock();
@@ -82,14 +78,14 @@ public class AppObjInvocationHandler implements InvocationHandler {
 	public Object invoke(Object o, Method m, Object[] arg)
 			throws Throwable {
 		
-		System.out.println("Method invoke");
+		System.out.println("Method invoke "+m.getName());
 		Object result = null;
 		boolean execute = true;
 		
 		try {
 			
 			if(m.isAnnotationPresent(Ecriture.class)){
-				System.out.println("WRite thing");
+				System.out.println("Write thing");
 				ob.jvnLockWrite();
 			}
 			else if(m.isAnnotationPresent(Lecture.class)){

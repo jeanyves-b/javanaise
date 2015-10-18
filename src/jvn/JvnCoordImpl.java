@@ -8,6 +8,7 @@
 
 package jvn;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -203,7 +204,9 @@ public class JvnCoordImpl
         			appObj = obj.jo.jvnGetObjectState();
         			obj.serverState.remove(server);
         		}
-        		obj.serverState.put(server, States.NL);
+    		}catch(RemoteException e){
+    			System.out.println("The connection to the server: "+server+" couldn't get done and it will be deleted");
+    			//obj.serverState.remove(server);
     		}
     	}
     	
@@ -225,6 +228,7 @@ public class JvnCoordImpl
     	
     	
     	for(Integer i: listObjects.keySet()){
+    		System.out.println("El servidor que está por ser eliminado: "+js);
     		listObjects.get(i).serverState.remove(js);
     	}
     	
