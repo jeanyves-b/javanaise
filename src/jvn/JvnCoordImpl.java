@@ -33,8 +33,6 @@ public class JvnCoordImpl
   **/
 	
 	public int count;
-	//public ArrayList<CoordObject> list = new ArrayList<CoordObject>();
-	//public
 	public ConcurrentHashMap<Integer, CoordObject> listObjects = new ConcurrentHashMap<Integer, CoordObject>();
 	public ConcurrentHashMap<String, Integer> listLookUp = new ConcurrentHashMap<String, Integer>();
 	
@@ -92,7 +90,6 @@ public class JvnCoordImpl
 		
 		
 		//We have the hypothesis that the object is registered for the first time in the coordinator
-		
 		//register in the lookUpList
 		listLookUp.put(jon, jo.jvnGetObjectId());
 		System.out.println("sthg");
@@ -146,21 +143,26 @@ public class JvnCoordImpl
     public Serializable jvnLockRead(int joi, JvnRemoteServer js)
     throws java.rmi.RemoteException, JvnException{
     	
-    	System.out.println("In the jvnLockRead");
+    	//System.out.println("In the jvnLockRead");
     	
     	CoordObject obj = listObjects.get(joi);
-    	Serializable appObj = obj.jo.jvnGetObjectState();
+    	Serializable appObj = null;
     	
     	for(JvnRemoteServer server: obj.serverState.keySet()){
-    		System.out.println("Server state "+server+ "es: "+obj.serverState.get(server));
+    		//System.out.println("Server state "+server+ "es: "+obj.serverState.get(server));
     		if(obj.serverState.get(server).compareTo(States.W) == 0){
     			if(!server.equals(js)){
     				appObj = server.jvnInvalidateWriterForReader(joi);
     				//Mettre a jour le appObj dedans le jvnObject in the coordinator?
     				obj.jo.jvnSetObjectState(appObj);
         			obj.serverState.put(server, States.R);
-        			System.out.println("Invalidating the writer for the server "+server);
+        			//System.out.println("Invalidating the writer for the server "+server);
     			}
+        		if (appObj == null)
+        		{
+        			appObj = obj.jo.jvnGetObjectState();
+        			obj.serverState.remove(server);
+        		}
     		}
     	}
     	
@@ -183,19 +185,23 @@ public class JvnCoordImpl
 		
 		
     	CoordObject obj = listObjects.get(joi);
-    	Serializable appObj = obj.jo.jvnGetObjectState();
-    	System.out.println("Lock Write in Coord");
+    	Serializable appObj = null;
+    	//System.out.println("Lock Write in Coord");
     	for(JvnRemoteServer server: obj.serverState.keySet()){
     		if(!server.equals(js)){
     			if(obj.serverState.get(server).equals(States.W)){
         			appObj = server.jvnInvalidateWriter(joi);
         			obj.jo.jvnSetObjectState(appObj);
-        			System.out.println("LockWrite- Invalidating the writer for the server "+server);
+        			//System.out.println("LockWrite- Invalidating the writer for the server "+server);
         		}
         		else{
-        			System.out.println("Invalidating the reader for the server 1"+server);
         			server.jvnInvalidateReader(joi);
-        			System.out.println("Invalidating the reader for the server "+server);
+        			//System.out.println("Invalidating the reader for the server "+server);
+        		}
+        		if (appObj == null)
+        		{
+        			appObj = obj.jo.jvnGetObjectState();
+        			obj.serverState.remove(server);
         		}
         		obj.serverState.put(server, States.NL);
     		}
