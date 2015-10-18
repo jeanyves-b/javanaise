@@ -189,22 +189,28 @@ public class JvnCoordImpl
     	Serializable appObj = null;
     	//System.out.println("Lock Write in Coord");
     	for(JvnRemoteServer server: obj.serverState.keySet()){
-    		if(!server.equals(js)){
-    			if(obj.serverState.get(server).equals(States.W)){
-        			appObj = server.jvnInvalidateWriter(joi);
-        			obj.jo.jvnSetObjectState(appObj);
-        			//System.out.println("LockWrite- Invalidating the writer for the server "+server);
+    		try
+    		{
+    			System.out.println("Server state "+server+ "es: "+obj.serverState.get(server));
+    		
+	    		if(!server.equals(js)){
+	    			if(obj.serverState.get(server).equals(States.W)){
+	        			appObj = server.jvnInvalidateWriter(joi);
+	        			obj.jo.jvnSetObjectState(appObj);
+	        			//System.out.println("LockWrite- Invalidating the writer for the server "+server);
+	        		}
+	        		else{
+	        			server.jvnInvalidateReader(joi);
+	        			//System.out.println("Invalidating the reader for the server "+server);
+	        		}
+	        		if (appObj == null)
+	        		{
+	        			appObj = obj.jo.jvnGetObjectState();
+	        			obj.serverState.remove(server);
+        			}
         		}
-        		else{
-        			server.jvnInvalidateReader(joi);
-        			//System.out.println("Invalidating the reader for the server "+server);
-        		}
-        		if (appObj == null)
-        		{
-        			appObj = obj.jo.jvnGetObjectState();
-        			obj.serverState.remove(server);
-        		}
-    		}catch(RemoteException e){
+    		}
+    		catch(RemoteException e){
     			System.out.println("The connection to the server: "+server+" couldn't get done and it will be deleted");
     			//obj.serverState.remove(server);
     		}
@@ -228,7 +234,7 @@ public class JvnCoordImpl
     	
     	
     	for(Integer i: listObjects.keySet()){
-    		System.out.println("El servidor que está por ser eliminado: "+js);
+    		System.out.println("El servidor que esta por ser eliminado: "+js);
     		listObjects.get(i).serverState.remove(js);
     	}
     	

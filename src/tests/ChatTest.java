@@ -2,7 +2,7 @@ package tests;
 
 public class ChatTest {
 
-	//Cohérence des verrous.
+	//Coherence des verrous.
 	
 	
 	
