@@ -264,7 +264,4 @@ public class JvnServerImpl
 		return o;
 	   
 	 }
-
 }
-
- 

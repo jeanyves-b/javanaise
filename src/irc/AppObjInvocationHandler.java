@@ -87,11 +87,11 @@ public class AppObjInvocationHandler implements InvocationHandler {
 		try {
 			
 			if(m.isAnnotationPresent(Ecriture.class)){
-				System.out.println("Write thing");
+				
 				ob.jvnLockWrite();
 			}
 			else if(m.isAnnotationPresent(Lecture.class)){
-				System.out.println("Read thing");
+				
 				ob.jvnLockRead();
 			}else{
 				execute = false;
