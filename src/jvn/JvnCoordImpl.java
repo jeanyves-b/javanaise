@@ -147,10 +147,13 @@ public class JvnCoordImpl
     	//System.out.println("In the jvnLockRead");
     	
     	CoordObject obj = listObjects.get(joi);
-    	Serializable appObj = null;
+    	//Serializable appObj = null;
+    	Serializable appObj = obj.jo.jvnGetObjectState();
     	
     	for(JvnRemoteServer server: obj.serverState.keySet()){
     		//System.out.println("Server state "+server+ "es: "+obj.serverState.get(server));
+    		
+    		
     		try
     		{
     			if(obj.serverState.get(server).compareTo(States.W) == 0){
@@ -193,7 +196,8 @@ public class JvnCoordImpl
 		
 		
     	CoordObject obj = listObjects.get(joi);
-    	Serializable appObj = null;
+    	//Serializable appObj = null;
+    	Serializable appObj = obj.jo.jvnGetObjectState();
     	//System.out.println("Lock Write in Coord");
     	for(JvnRemoteServer server: obj.serverState.keySet()){
     		try

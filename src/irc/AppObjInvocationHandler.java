@@ -24,7 +24,7 @@ public class AppObjInvocationHandler implements InvocationHandler {
 		Object o=jo.jvnGetObjectState();
 		
 		return  java.lang.reflect.Proxy.newProxyInstance(
-				o.getClass().getClassLoader(), //ob
+				jo.getClass().getClassLoader(), //ob
 				o.getClass().getInterfaces(),
 				new AppObjInvocationHandler(jo));
 		
