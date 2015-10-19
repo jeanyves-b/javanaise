@@ -151,20 +151,27 @@ public class JvnCoordImpl
     	
     	for(JvnRemoteServer server: obj.serverState.keySet()){
     		//System.out.println("Server state "+server+ "es: "+obj.serverState.get(server));
-    		if(obj.serverState.get(server).compareTo(States.W) == 0){
-    			if(!server.equals(js)){
-    				appObj = server.jvnInvalidateWriterForReader(joi);
-    				//Mettre a jour le appObj dedans le jvnObject in the coordinator?
-    				obj.jo.jvnSetObjectState(appObj);
-        			obj.serverState.put(server, States.R);
-        			//System.out.println("Invalidating the writer for the server "+server);
-    			}
-        		if (appObj == null)
-        		{
-        			appObj = obj.jo.jvnGetObjectState();
-        			obj.serverState.remove(server);
+    		try
+    		{
+    			if(obj.serverState.get(server).compareTo(States.W) == 0){
+        			if(!server.equals(js)){
+        				appObj = server.jvnInvalidateWriterForReader(joi);
+        				//Mettre a jour le appObj dedans le jvnObject in the coordinator?
+        				obj.jo.jvnSetObjectState(appObj);
+            			obj.serverState.put(server, States.R);
+            			//System.out.println("Invalidating the writer for the server "+server);
+        			}
+            		/*if (appObj == null)
+            		{
+            			appObj = obj.jo.jvnGetObjectState();
+            			obj.serverState.remove(server);
+            		}*/ 
         		}
+    		}catch(RemoteException e){
+    			System.out.println("The connection to the server: "+server+" couldn't get done and it will be deleted");
+    			//obj.serverState.remove(server);
     		}
+    		
     	}
     	
     	obj.serverState.put(js, States.R);
@@ -191,7 +198,7 @@ public class JvnCoordImpl
     	for(JvnRemoteServer server: obj.serverState.keySet()){
     		try
     		{
-    			System.out.println("Server state "+server+ "es: "+obj.serverState.get(server));
+    			//System.out.println("Server state "+server+ "es: "+obj.serverState.get(server));
     		
 	    		if(!server.equals(js)){
 	    			if(obj.serverState.get(server).equals(States.W)){
@@ -203,11 +210,13 @@ public class JvnCoordImpl
 	        			server.jvnInvalidateReader(joi);
 	        			//System.out.println("Invalidating the reader for the server "+server);
 	        		}
-	        		if (appObj == null)
+	    			
+	    			obj.serverState.put(server, States.NL);
+	        		/*if (appObj == null) Why is this? 
 	        		{
 	        			appObj = obj.jo.jvnGetObjectState();
 	        			obj.serverState.remove(server);
-        			}
+        			}*/ 
         		}
     		}
     		catch(RemoteException e){
