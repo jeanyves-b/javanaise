@@ -232,10 +232,9 @@ public class JvnCoordImpl
     	
     	
     	for(Integer i: listObjects.keySet()){
-    		System.out.println("El servidor que está por ser eliminado: "+js);
+    		System.out.println("The server that is going to be deleted is: "+js);
     		listObjects.get(i).serverState.remove(js);
     	}
-    	
     }
     
     private void printCoordState(){

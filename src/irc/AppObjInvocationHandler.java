@@ -19,6 +19,17 @@ public class AppObjInvocationHandler implements InvocationHandler {
 		ob=o;
 	}
 
+	public static Object newInstance(JvnObject jo) throws JvnException{
+		
+		Object o=jo.jvnGetObjectState();
+		
+		return  java.lang.reflect.Proxy.newProxyInstance(
+				o.getClass().getClassLoader(), //ob
+				o.getClass().getInterfaces(),
+				new AppObjInvocationHandler(jo));
+		
+	}
+	
 	public static Object LookupObject(String jon) 
 	throws jvn.JvnException{
 		
@@ -29,13 +40,10 @@ public class AppObjInvocationHandler implements InvocationHandler {
 		System.out.println("The object in LookUpObject AppObjInv " + ob);
 		if(ob != null){
 		
-		Object o=ob.jvnGetObjectState();
-		Object temp = java.lang.reflect.Proxy.newProxyInstance(
-				ob.getClass().getClassLoader(),
-				o.getClass().getInterfaces(),
-				new AppObjInvocationHandler(ob));
-
-		System.out.println("Temp: "+temp);
+			//Object o=ob.jvnGetObjectState();
+			Object temp = newInstance(ob);
+	
+			System.out.println("Temp: "+temp);
 			return temp;
 		}else
 		{
@@ -51,21 +59,15 @@ public class AppObjInvocationHandler implements InvocationHandler {
 		System.out.println("RegisterObject ");
 		
 		JvnObject obj = JvnServerImpl.jvnGetServer().jvnCreateObject(appObject);
-		Object o=obj.jvnGetObjectState();
 		obj.jvnUnLock();
 		JvnServerImpl.jvnGetServer().jvnRegisterObject("IRC", obj);
-	
-		
+
 		System.out.println("The object in RegisterObject "+obj);
 		
-		return java.lang.reflect.Proxy.newProxyInstance(
-				obj.getClass().getClassLoader(),
-				o.getClass().getInterfaces(),
-				new AppObjInvocationHandler(obj));
+		Object temp = newInstance(obj);
+		
+		return temp;
 	}
-
-
-
 
 	
 	/*public Object invoke(Object proxy, Method method, Object[] args)
